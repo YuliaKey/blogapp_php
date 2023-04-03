@@ -4,13 +4,19 @@
     const ERROR_CONTENT_TOO_SHORT = "L'article est trop court";
     const ERROR_IMAGE_URL = "L'image doit etre une url valide";
 
-    $filename = __DIR__."/data/articles.json";
+    $pdo = require_once('./database/database.php');
+    $statementCreateOne = $pdo->prepare(
+        'INSERT INTO article (title, category, content, image) VALUES (:title, :category, :content, :image)'
+    );
+    $statementReadOne = $pdo->prepare('SELECT * FROM article WHERE id=:id');
+    $statementUpdateOne = $pdo->prepare(
+        'UPDATE article SET title=:title, category=:category, content=:content, image=:image WHERE id=:id'
+    );
+
+
     $articles = [];
     $category = '';
 
-    if(file_exists($filename)) {
-        $articles = json_decode(file_get_contents($filename), true) ?? [];
-    }
 
     $errors = [
         'title' => '',
@@ -25,8 +31,9 @@
 
     // EN mode edition on recupere notre article
     if($idArticle) {
-        $articleIndex = array_search($idArticle, array_column($articles, 'id'));
-        $article = $articles[$articleIndex];
+        $statementReadOne->bindValue(':id', $idArticle);
+        $statementReadOne->execute();
+        $article = $statementReadOne->fetch();
 
         
         $title = $article['title'];
@@ -79,23 +86,25 @@
 
             if($idArticle) {
                 // mode edition
-                $articles[$articleIndex]['title'] = $title;
-                $articles[$articleIndex]['image'] = $image;
-                $articles[$articleIndex]['category'] = $category;
-                $articles[$articleIndex]['content'] = $content;
+                $article['title'] = $title;
+                $article['image'] = $image;
+                $article['category'] = $category;
+                $article['content'] = $content;
+
+                $statementUpdateOne->bindOne(':title', $article['title']);
+                $statementUpdateOne->bindOne(':caregory', $article['caregory']);
+                $statementUpdateOne->bindOne(':content', $article['content']);
+                $statementUpdateOne->bindOne(':image', $article['image']);
+                $statementUpdateOne->bindOne(':id', $article['id']);
+                $statementUpdateOne->execute();
             } else {
                 //mode creation
-                $newArticle = [
-                    'title' => $title,
-                    'image' => $image,
-                    'category' => $category,
-                    'content' => $content,
-                    'id' => time()
-                ];
-
-                $articles = [...$articles, $newArticle];
+                $statementCreateOne->bindOne(':title', $title);
+                $statementCreateOne->bindOne(':category', $category);
+                $statementCreateOne->bindOne(':content', $content);
+                $statementCreateOne->bindOne(':image', $image);
+                $statementCreateOne->execute();
             }
-            file_put_contents($filename, json_encode($articles));
             header("Location: /");
         }
 
