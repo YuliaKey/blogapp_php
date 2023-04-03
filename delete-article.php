@@ -1,4 +1,11 @@
 <?php
+   
+    /**
+     * @var ArticleDAO
+     */
+
+    $article = require_once './database/models/ArticleDAO';
+
 
     $pdo = require_once "./database/database.php";
     $statement = $pdo->prepare('DELETE FROM article WHERE id=:id');
@@ -11,8 +18,7 @@
     $idArticle = $_GET['id'] ?? '';
 
     if($idArticle) {
-        $statement->bindValue(':id', $idArticle);
-        $statement->execute();
+       $articleDAO->deleteOne($idArticle);
     }
 
     header('Location: /');
