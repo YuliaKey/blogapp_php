@@ -3,7 +3,7 @@
     $articles = json_decode(file_get_contents('articles.json'), true);
 
     // PDO : PHP DATA OBJECT -> il va nous permettre de communiquer avec une base de donnes, un object native du php
-    $url = 'mysql:host-localhost:8889;dbname-blog';
+    $url = 'mysql:host=localhost:8889;dbname=blog';
     $user = 'root';
     $pwd = 'root';
 

@@ -1,8 +1,7 @@
 <?php
 
-$pdo = require_once '../database.php';
 
-class ArticleDAO {
+class ArticleDAO { //article data acceess objet
 
     private PDOStatement $statementReadAll;
     private PDOStatement $statementReadOne;
@@ -12,23 +11,23 @@ class ArticleDAO {
 
     function __construct(
         private PDO $pdo
-    )
-    {
-        $this->statementReadAll = $this->$pdo->prepare(
-            'SELECT * FROM article'
-        );
-        $this->statementReadOne = $this->$pdo->prepare(
-            'SELECT * FROM article WHERE id=:id'
-        );
-        $this->statementCreateOne = $this->$pdo->prepare(
-            'INSERT INTO article (title, category, content, image) VALUES (:title, :category, :content, :image)'        );
-        $this->statementUpdateOne = $pdo->prepare(
-            'UPDATE article SET title=:title, category=:category, content=:content, image=:image WHERE id=:id'
-        );
-        $this->statementDeleteOne = $this->$pdo->prepare(
-            'DELETE FROM article WHERE id=:id'
-        );
-    }
+        )
+        {
+            $this->statementReadAll = $this->$pdo->prepare(
+                'SELECT * FROM article'
+            );
+            $this->statementReadOne = $this->$pdo->prepare(
+                'SELECT * FROM article WHERE id=:id'
+            );
+            $this->statementCreateOne = $this->$pdo->prepare(
+                'INSERT INTO article (title, category, content, image) VALUES (:title, :category, :content, :image)'        );
+            $this->statementUpdateOne = $pdo->prepare(
+                'UPDATE article SET title=:title, category=:category, content=:content, image=:image WHERE id=:id'
+            );
+            $this->statementDeleteOne = $this->$pdo->prepare(
+                'DELETE FROM article WHERE id=:id'
+            );
+        }
 
     public function getAll() {
         $this->statementReadAll->execute();
@@ -48,7 +47,7 @@ class ArticleDAO {
         $this->statementCreateOne->bindOne(':image', $article['image']);
         $this->statementCreateOne->execute();
         //je renvoie l'article qui vient d'etre creer
-        return $this->pdo->lastInsertid();
+        return $this->getOne($this->pdo->lastInsertid());
     }
 
     public function deleteOne(int $id) {
@@ -58,11 +57,11 @@ class ArticleDAO {
     }
 
     public function updateOne($article, $id) {
-        $this->statementUpdateOne->bindOne(':title', $article['title']);
-        $this->statementUpdateOne->bindOne(':caregory', $article['caregory']);
-        $this->statementUpdateOne->bindOne(':content', $article['content']);
-        $this->statementUpdateOne->bindOne(':image', $article['image']);
-        $this->statementUpdateOne->bindOne(':id', $id);
+        $this->statementUpdateOne->bindValue(':title', $article['title']);
+        $this->statementUpdateOne->bindValue(':caregory', $article['caregory']);
+        $this->statementUpdateOne->bindValue(':content', $article['content']);
+        $this->statementUpdateOne->bindValue(':image', $article['image']);
+        $this->statementUpdateOne->bindValue(':id', $id);
         $this->statementUpdateOne->execute();
         return $article;
         
