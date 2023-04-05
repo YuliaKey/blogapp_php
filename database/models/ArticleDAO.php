@@ -13,18 +13,18 @@ class ArticleDAO { //article data acceess objet
         private PDO $pdo
         )
         {
-            $this->statementReadAll = $this->$pdo->prepare(
+            $this->statementReadAll = $this->pdo->prepare(
                 'SELECT * FROM article'
             );
-            $this->statementReadOne = $this->$pdo->prepare(
+            $this->statementReadOne = $this->pdo->prepare(
                 'SELECT * FROM article WHERE id=:id'
             );
-            $this->statementCreateOne = $this->$pdo->prepare(
+            $this->statementCreateOne = $this->pdo->prepare(
                 'INSERT INTO article (title, category, content, image) VALUES (:title, :category, :content, :image)'        );
-            $this->statementUpdateOne = $pdo->prepare(
+            $this->statementUpdateOne = $this->pdo->prepare(
                 'UPDATE article SET title=:title, category=:category, content=:content, image=:image WHERE id=:id'
             );
-            $this->statementDeleteOne = $this->$pdo->prepare(
+            $this->statementDeleteOne = $this->pdo->prepare(
                 'DELETE FROM article WHERE id=:id'
             );
         }
@@ -70,5 +70,5 @@ class ArticleDAO { //article data acceess objet
 
 }
 
-$pdo = require_once './database/database.php';
+global $pdo;
 return new ArticleDAO($pdo);

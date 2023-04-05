@@ -1,5 +1,15 @@
 <?php
 
+    require __DIR__.'/database/database.php';
+    /**
+     * @var AuthDAO
+     */
+    $authDAO = require './database/models/AuthDAO.php';
+    $currentUser = $authDAO->isLoggedIn();
+
+    if(!$currentUser) {
+        header('Location: /auth-login.php');
+    }
 
 
     const ERROR_REQUIRED = "Veuillez renseigner ce champ";
@@ -10,8 +20,7 @@
     /**
      * @var ArticleDAO
      */
-    
-    $article = require_once './database/models/ArticleDAO';
+    $articleDAO = require './database/models/ArticleDAO.php';
 
     $articles = [];
     $category = '';

@@ -1,5 +1,12 @@
 <?php 
 
+require __DIR__.'/database/database.php';
+/**
+ * @var AuthDAO
+ */
+$authDAO = require './database/models/AuthDAO.php';
+$currentUser = $authDAO->isLoggedIn();
+
 $articleDAO = require_once './database/models/ArticleDAO';
 
 $articles = [];

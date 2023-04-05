@@ -1,8 +1,11 @@
 <?php 
+
+    require __DIR__.'/database/database.php';
+
     /** 
-     * @var AuthDao
+     * @var AuthDAO
      */
-    $authDAO = require_once './database/models/authDAO';
+    $authDAO = require_once './database/models/AuthDAO.php';
 
     const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
     const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
@@ -50,7 +53,7 @@
             if(!$user) {
                 $errors['email'] = ERROR_EMAIL_UNKNOWN;
             } else {
-                if(!$password_verify($password, $user['password'])){
+                if(!password_verify($password, $user['password'])){
                     $errors['password'] = ERROR_PASSWORD_MISMATCH;
                 } else {
                     // on cree une nouvelle session
@@ -59,7 +62,7 @@
                     // on cree notre cookie
                     setcookie('session', $sessionId, time() + 60 * 60 * 24 * 14, "", "", false, true);
 
-                    header('Location');
+                    header('Location: /');
                 }
             }
             

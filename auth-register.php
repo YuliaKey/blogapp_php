@@ -1,8 +1,11 @@
 <?php 
+    require __DIR__.'/database/database.php';
+
     /** 
-     * @var AuthDao
+     * @var AuthDAO
      */
-    $authDAO = require_once './database/models/authDAO';
+    $authDAO = require_once './database/models/AuthDAO.php';
+    
 
     const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
     const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
