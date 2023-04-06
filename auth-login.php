@@ -59,9 +59,7 @@
                     // on cree une nouvelle session
                     $sessionId = $authDAO->createSession($user['id']);
 
-                    // on cree notre cookie
-                    setcookie('session', $sessionId, time() + 60 * 60 * 24 * 14, "", "", false, true);
-
+                    
                     header('Location: /');
                 }
             }

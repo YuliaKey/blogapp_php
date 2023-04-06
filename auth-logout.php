@@ -9,7 +9,7 @@
     if($sessionId) {
         //supprimer la session de la base de donnees
         $authDAO->logout($sessionId);
-        setcookie('session', '', time() - 1);
+        
         header('Location: /auth-login.php');
     };
 ?>
