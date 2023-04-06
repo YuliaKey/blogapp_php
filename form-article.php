@@ -40,13 +40,12 @@
     // EN mode edition on recupere notre article
     if($idArticle) {
         $article = $articleDAO->getOne($idArticle);
-        
-
-        
+    
         $title = $article['title'];
         $image = $article['image'];
         $category = $article['category'];
         $content = $article['content'];
+
     }
 
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -97,8 +96,9 @@
                 $article['image'] = $image;
                 $article['category'] = $category;
                 $article['content'] = $content;
+                $article['author'] = $currentUser['id'];
 
-                $article = $articleDAO->updateOne($article, $idArticle);
+                $articleDAO->updateOne($article, $idArticle);
                 
             } else {
                 //mode creation
@@ -106,7 +106,8 @@
                     'title' => $title,
                     'category' => $category,
                     'content' => $content,
-                    'image' => $image
+                    'image' => $image,
+                    'author' => $currentUser['id']
                 ]);
             }
             header("Location: /");
